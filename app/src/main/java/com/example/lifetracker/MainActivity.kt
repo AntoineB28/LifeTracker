@@ -14,19 +14,65 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import kotlin.reflect.KProperty
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            CounterApp()
+            //CounterApp()
+            AppNavigation()
         }
     }
 }
 
+
 @Composable
-fun CounterApp() {
+fun AppNavigation() {
+
+    val navController = rememberNavController()
+    NavHost(navController, startDestination = "home") {
+        composable("home") { MainScreen(navController) }
+        composable("mainapp") { CounterApp(navController) }
+    }
+}
+
+@Composable
+fun MainScreen(navController: NavHostController) {
+    var cStartingLife by remember { mutableStateOf("40") }
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        TextField(
+            value = cStartingLife,
+            onValueChange = { cStartingLife = it },
+            label = { Text("Label") }
+        )
+        Button(onClick = { navController.navigate("mainapp") }) {
+            Text("Start Lifetracker")
+        }
+    }
+}
+@Composable
+fun SettingsScreen(navController: NavHostController) {
+    Column(Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+        Text("Settings", style = MaterialTheme.typography.headlineLarge)
+
+        Spacer(modifier = Modifier.height(20.dp))
+
+        Button(onClick = { navController.popBackStack() }) {
+            Text("Go Back")
+        }
+    }
+}
+
+
+@Composable
+fun CounterApp( navController: NavHostController) {
     val players = remember { List(4) { Player(40) } }
     var visibleBox by remember { mutableStateOf<Int?>(null) }
 
