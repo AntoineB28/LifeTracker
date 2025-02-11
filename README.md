@@ -1,6 +1,6 @@
 Todo :
 Commander damage -- Done
-   >Commander damage partner
+Commander damage partner
 Page for each damage type
 Ui improvement with sliding tab
 New game button 
